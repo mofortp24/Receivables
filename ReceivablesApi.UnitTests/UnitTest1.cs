@@ -12,6 +12,7 @@ namespace ReceivablesApi.UnitTests
         public void Test1()
         {
             Assert.AreEqual(1,1);
+
             //Assert.Pass();
         }
     }
