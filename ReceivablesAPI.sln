@@ -1,0 +1,56 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReceivablesAPI.API", "ReceivablesAPI.API\ReceivablesAPI.API.csproj", "{73DE5654-91B0-4275-AAEF-DF18E7AB75AD}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReceivablesAPI.Application", "ReceivablesAPI.Application\ReceivablesAPI.Application.csproj", "{D405FE4B-C72B-4754-8429-62EADA692E4B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReceivablesAPI.Domain", "ReceivablesAPI.Domain\ReceivablesAPI.Domain.csproj", "{9F4061E2-AB3C-418F-A497-AB860E25D207}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReceivablesAPI.Infrastructure", "ReceivablesAPI.Infrastructure\ReceivablesAPI.Infrastructure.csproj", "{331B48DF-DE1F-45E5-B869-08FC6AFE9DE5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReceivablesApi.UnitTests", "ReceivablesApi.UnitTests\ReceivablesApi.UnitTests.csproj", "{16D32053-896C-41EF-870D-BE6807F5ABCE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution items", "Solution items", "{D297760D-4CA4-4FA9-9A63-BE8FF06BF235}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		.gitignore = .gitignore
+		global.json = global.json
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{73DE5654-91B0-4275-AAEF-DF18E7AB75AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{73DE5654-91B0-4275-AAEF-DF18E7AB75AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{73DE5654-91B0-4275-AAEF-DF18E7AB75AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{73DE5654-91B0-4275-AAEF-DF18E7AB75AD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D405FE4B-C72B-4754-8429-62EADA692E4B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D405FE4B-C72B-4754-8429-62EADA692E4B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D405FE4B-C72B-4754-8429-62EADA692E4B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D405FE4B-C72B-4754-8429-62EADA692E4B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9F4061E2-AB3C-418F-A497-AB860E25D207}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F4061E2-AB3C-418F-A497-AB860E25D207}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F4061E2-AB3C-418F-A497-AB860E25D207}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F4061E2-AB3C-418F-A497-AB860E25D207}.Release|Any CPU.Build.0 = Release|Any CPU
+		{331B48DF-DE1F-45E5-B869-08FC6AFE9DE5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{331B48DF-DE1F-45E5-B869-08FC6AFE9DE5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{331B48DF-DE1F-45E5-B869-08FC6AFE9DE5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{331B48DF-DE1F-45E5-B869-08FC6AFE9DE5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{16D32053-896C-41EF-870D-BE6807F5ABCE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{16D32053-896C-41EF-870D-BE6807F5ABCE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{16D32053-896C-41EF-870D-BE6807F5ABCE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{16D32053-896C-41EF-870D-BE6807F5ABCE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0CCE04C2-58B9-4597-9E56-EB833F7D331D}
+	EndGlobalSection
+EndGlobal
