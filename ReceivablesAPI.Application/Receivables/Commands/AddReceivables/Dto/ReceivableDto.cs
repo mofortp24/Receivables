@@ -1,5 +1,9 @@
-﻿namespace ReceivablesAPI.Application.Receivables.Commands.AddReceivables.Dto;
+﻿using System.Runtime.Serialization;
 
+namespace ReceivablesAPI.Application.Receivables.Commands.AddReceivables.Dto;
+
+[DataContract]
+[Serializable]
 public class ReceivableDto
 {
     public string Reference { get; set; } = string.Empty;

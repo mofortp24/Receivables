@@ -6,10 +6,10 @@ public class AddReceivablesCommandValidator : AbstractValidator<AddReceivablesCo
 {
     public AddReceivablesCommandValidator()
     {
-        RuleFor(x => x.Receivables.ReceivableDtoList)
+        RuleFor(x => x.Receivables.ReceivableList)
             .NotEmpty().WithMessage("At least one receivable must be provided");
 
-        RuleForEach(x => x.Receivables.ReceivableDtoList)
+        RuleForEach(x => x.Receivables.ReceivableList)
             .SetValidator(new ReceivableDtoValidator());
     }
 }

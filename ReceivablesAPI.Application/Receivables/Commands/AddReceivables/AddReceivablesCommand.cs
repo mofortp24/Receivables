@@ -34,7 +34,7 @@ namespace ReceivablesAPI.Application.Receivables.Commands.AddReceivables;
                 BatchReference = _batchReferenceProvider.GenerateNextBatchReference<Receivable>(cancellationToken)
             };
 
-            foreach (var receivableDto in request.Receivables.ReceivableDtoList)
+            foreach (var receivableDto in request.Receivables.ReceivableList)
             {
                 var entity = _mapper.Map<Receivable>(receivableDto);
                 batch.Receivables.Add(entity);
@@ -43,7 +43,7 @@ namespace ReceivablesAPI.Application.Receivables.Commands.AddReceivables;
             }
 
             _context.ReceivableBatches.Add(batch);
-   
+
             await _context.SaveChangesAsync(cancellationToken);
 
             return batch.BatchReference;
