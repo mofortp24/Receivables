@@ -2,9 +2,6 @@
 
 public class Receivable : BaseAuditableEntity
 {
-    //public int ReceivableId { get; set; }
-
-    //public string BatchReference { get; set; }
     public int ReceivableBatchId { get; set; }
 
     public string Reference { get; set; } = string.Empty;
@@ -20,7 +17,6 @@ public class Receivable : BaseAuditableEntity
 
     public int DebtorAddressId { get; set; }
 
-    //public ReceivableDebtor Debtor { get; set; } = new ();
     public virtual ReceivableDebtor Debtor { get; set; } = null!;
 
     public virtual ReceivableDebtorAddress DebtorAddress { get; set; } = null!;
