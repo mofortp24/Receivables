@@ -9,12 +9,12 @@ using Microsoft.EntityFrameworkCore;
 namespace ReceivablesAPI.Application.Receivables.Queries.GetReceivablesSummary;
 
 //[Authorize]
-public record GetReceivablesSummaryQuery : IRequest<ReceivablesSummary>
+public record GetReceivablesOpenClosedSummaryQuery : IRequest<ReceivablesOpenClosedSummary>
 {
     public DateTime? ReceivablesSummaryDate { get; init; }
 }
 
-public class GetReceivablesSummaryQueryHandler : IRequestHandler<GetReceivablesSummaryQuery, ReceivablesSummary>
+public class GetReceivablesSummaryQueryHandler : IRequestHandler<GetReceivablesOpenClosedSummaryQuery, ReceivablesOpenClosedSummary>
 {
     private readonly IApplicationDbContext _context;
     private readonly IMapper _mapper;
@@ -25,7 +25,7 @@ public class GetReceivablesSummaryQueryHandler : IRequestHandler<GetReceivablesS
         _mapper = mapper;
     }
 
-    public async Task<ReceivablesSummary> Handle(GetReceivablesSummaryQuery request, CancellationToken cancellationToken)
+    public async Task<ReceivablesOpenClosedSummary> Handle(GetReceivablesOpenClosedSummaryQuery request, CancellationToken cancellationToken)
     {
         var receivableStatsTill = (request.ReceivablesSummaryDate?.Date ?? DateTime.Now);
         var openCloseCounters = await _context.Receivables
@@ -39,27 +39,13 @@ public class GetReceivablesSummaryQueryHandler : IRequestHandler<GetReceivablesS
             })
             .ToListAsync(cancellationToken: cancellationToken);
 
-        return new ReceivablesSummary
+        return new ReceivablesOpenClosedSummary
         {
             GenerationDate = DateTime.Now,
-            ReceivablesOpenClosedSummary = new ReceivablesOpenClosedSummaryDto(){
+            ReceivablesSummary = new ReceivablesOpenClosedSummaryDto(){
                 OpenedReceivables = openCloseCounters.FirstOrDefault(c => c.IsOpen == 1)?.Count ?? 0,
                 ClosedReceivables = openCloseCounters.FirstOrDefault(c => c.IsCosed == 1)?.Count ?? 0
             }
         };
     }
-}
-
-public class ReceivablesSummary
-{
-    public DateTime GenerationDate { get; init; }
-
-    public ReceivablesOpenClosedSummaryDto ReceivablesOpenClosedSummary { get; init; } = new ();
-}
-
-public class ReceivablesOpenClosedSummaryDto
-{
-    public int OpenedReceivables { get; init; }
-
-    public int ClosedReceivables { get; init; }
 }

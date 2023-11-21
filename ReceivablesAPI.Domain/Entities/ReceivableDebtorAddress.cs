@@ -3,7 +3,7 @@
 public class ReceivableDebtorAddress : BaseAuditableEntity
 {
     //public int DebtorAddressId { get; set; }
-    public int DebtorId { get; set; }
+    //public int DebtorId { get; set; }
 
     public string? DebtorAddress1 { get; set; }
     public string? DebtorAddress2 { get; set; }
@@ -13,5 +13,9 @@ public class ReceivableDebtorAddress : BaseAuditableEntity
     public CountryCode DebtorCountryCode { get; set; }
     public string? DebtorRegistrationNumber { get; set; }
 
-    public virtual ReceivableDebtor Debtor { get; set; }
+    public string HashCode { get; set; } = string.Empty;
+
+    //public virtual ReceivableDebtor Debtor { get; set; } = null!;
+
+    public IList<Receivable> Receivables { get; set; } = null!;
 }

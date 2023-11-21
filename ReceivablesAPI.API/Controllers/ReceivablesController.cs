@@ -26,8 +26,8 @@ namespace ReceivablesAPI.API.Controllers
 
         }
 
-        [HttpPost("/stats/[action]")]
-        public async Task<ActionResult<ReceivablesSummary>> GetReceivablesSummary([FromQuery] GetReceivablesSummaryQuery query)
+        [HttpGet("/stats/[action]")]
+        public async Task<ActionResult<ReceivablesOpenClosedSummary>> GetReceivablesOpenClosedSummary([FromQuery] GetReceivablesOpenClosedSummaryQuery query)
         {
             return await Mediator.Send(query);
         }
