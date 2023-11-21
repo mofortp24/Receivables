@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using ReceivablesAPI.Domain.Enums;
+using System.Numerics;
 
 namespace ReceivablesAPI.Infrastructure.Persistence;
 
@@ -91,15 +92,16 @@ public class ApplicationDbContextInitializer
                         {
                             DebtorName = "John Kowalsky", 
                             DebtorReference = "DBT_Ref_01",
-                            DebtorAddress = new ReceivableDebtorAddress() { 
-                                DebtorAddress1 = "Address 1/23", 
-                                DebtorAddress2 = "Address 2/48",
-                                DebtorCountryCode = CountryCode.PL, 
-                                DebtorRegistrationNumber = "PL 87654", 
-                                DebtorState = "Mazowieckie", 
-                                DebtorTown = "Warsaw",
-                                DebtorZip = "02-333"
-                            }
+                        },
+
+                        DebtorAddress = new ReceivableDebtorAddress() { 
+                            DebtorAddress1 = "Address 1/23", 
+                            DebtorAddress2 = "Address 2/48",
+                            DebtorCountryCode = CountryCode.PL, 
+                            DebtorRegistrationNumber = "PL 87654", 
+                            DebtorState = "Mazowieckie", 
+                            DebtorTown = "Warsaw",
+                            DebtorZip = "02-333"
                         },
                         
                         OpeningValue = 654.32m,
@@ -120,16 +122,19 @@ public class ApplicationDbContextInitializer
                         {
                             DebtorName = "Eva Kowalsky", 
                             DebtorReference = "DBT_Ref_02",
-                            DebtorAddress = new ReceivableDebtorAddress() { 
-                                DebtorAddress1 = "Address 1/23", 
-                                DebtorAddress2 = "Address 2/48",
-                                DebtorCountryCode = CountryCode.PL, 
-                                DebtorRegistrationNumber = null, 
-                                DebtorState = "Mazowieckie", 
-                                DebtorTown = "Warsaw",
-                                DebtorZip = "02-333"
-                            }
+                            
                         },
+
+                        DebtorAddress = new ReceivableDebtorAddress() { 
+                            DebtorAddress1 = "Address 1/23", 
+                            DebtorAddress2 = "Address 2/48",
+                            DebtorCountryCode = CountryCode.PL, 
+                            DebtorRegistrationNumber = null, 
+                            DebtorState = "Mazowieckie", 
+                            DebtorTown = "Warsaw",
+                            DebtorZip = "02-333"
+                        },
+
                         OpeningValue = 333.44m,
                         PaidValue = 111.22m,
                         DueDate = DateTime.Now.AddMonths(2),

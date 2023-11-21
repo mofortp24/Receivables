@@ -21,17 +21,31 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.Debtor, opt => opt.MapFrom(src => new ReceivableDebtor
             {
                 DebtorReference = src.DebtorReference,
-                DebtorName = src.DebtorName,
-                DebtorAddress = new ReceivableDebtorAddress
-                {
-                    DebtorAddress1 = src.DebtorAddress1,
-                    DebtorAddress2 = src.DebtorAddress2,
-                    DebtorTown = src.DebtorTown,
-                    DebtorState = src.DebtorState,
-                    DebtorZip = src.DebtorZip,
-                    DebtorCountryCode = Enum.Parse<CountryCode>(src.DebtorCountryCode),
-                    DebtorRegistrationNumber = src.DebtorRegistrationNumber
-                }}))
+                DebtorName = src.DebtorName
+                //,
+                //DebtorAddresses = new List<ReceivableDebtorAddress>() {
+                //    new()
+                //    {
+                //        DebtorAddress1 = src.DebtorAddress1,
+                //        DebtorAddress2 = src.DebtorAddress2,
+                //        DebtorTown = src.DebtorTown,
+                //        DebtorState = src.DebtorState,
+                //        DebtorZip = src.DebtorZip,
+                //        DebtorCountryCode = Enum.Parse<CountryCode>(src.DebtorCountryCode),
+                //        DebtorRegistrationNumber = src.DebtorRegistrationNumber
+                //    }
+                //}
+            }))
+            .ForMember(dest => dest.DebtorAddress, opt => opt.MapFrom(src => new ReceivableDebtorAddress
+            {
+                DebtorAddress1 = src.DebtorAddress1,
+                DebtorAddress2 = src.DebtorAddress2,
+                DebtorTown = src.DebtorTown,
+                DebtorState = src.DebtorState,
+                DebtorZip = src.DebtorZip,
+                DebtorCountryCode = Enum.Parse<CountryCode>(src.DebtorCountryCode),
+                DebtorRegistrationNumber = src.DebtorRegistrationNumber
+            }))
             //.ForMember(dest => dest.DebtorAddress, opt => opt.MapFrom(src => new ReceivableDebtorAddress
             //{
             //    DebtorAddress1 = src.DebtorAddress1,

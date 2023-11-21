@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using ReceivablesAPI.Application.Common.Providers;
 using ReceivablesAPI.Application.Receivables.Commands.AddReceivables.Dto;
 
 namespace ReceivablesAPI.Application.Receivables.Commands.AddReceivables;
@@ -8,30 +9,30 @@ public class ReceivableDtoValidator : AbstractValidator<ReceivableDto>
     public ReceivableDtoValidator()
     {
         RuleFor(x => x.Reference)
-            .NotEmpty().WithMessage("Reference is required");
+            .NotEmpty().WithMessage(ValidationMessageProvider.ReferenceIsRequired);
 
         RuleFor(x => x.CurrencyCode)
-            .NotEmpty().WithMessage("Currency code is required");
+            .NotEmpty().WithMessage(ValidationMessageProvider.CurrencyCodeIsRequired);
 
         RuleFor(x => x.IssueDate)
-            .NotEmpty().WithMessage("Issue date is required");
+            .NotEmpty().WithMessage(ValidationMessageProvider.IssueDateIsRequired);
 
         RuleFor(x => x.OpeningValue)
-            .GreaterThan(0).WithMessage("Opening value must be greater than zero");
+            .GreaterThan(0).WithMessage(ValidationMessageProvider.OpeningValueMustBeGreaterThanZero);
 
         RuleFor(x => x.PaidValue)
-            .GreaterThanOrEqualTo(0).WithMessage("Paid value must be greater than or equal to zero");
+            .GreaterThanOrEqualTo(0).WithMessage(ValidationMessageProvider.PaidValueMustBeGreaterThanOrEqualToZero);
 
         RuleFor(x => x.DueDate)
-            .NotEmpty().WithMessage("Due date is required");
+            .NotEmpty().WithMessage(ValidationMessageProvider.DueDateIsRequired);
 
         RuleFor(x => x.DebtorName)
-            .NotEmpty().WithMessage("Debtor name is required");
+            .NotEmpty().WithMessage(ValidationMessageProvider.DebtorNameIsRequired);
 
         RuleFor(x => x.DebtorReference)
-            .NotEmpty().WithMessage("Debtor reference is required");
+            .NotEmpty().WithMessage(ValidationMessageProvider.DebtorReferenceIsRequired);
 
         RuleFor(x => x.DebtorCountryCode)
-            .NotEmpty().WithMessage("Debtor country code is required");
+            .NotEmpty().WithMessage(ValidationMessageProvider.DebtorCountryCodeIsRequired);
     }
 }

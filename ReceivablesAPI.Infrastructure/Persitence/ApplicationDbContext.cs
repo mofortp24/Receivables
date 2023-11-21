@@ -17,9 +17,9 @@ public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>, 
 {
     private readonly IMediator _mediator;
     private readonly AuditableEntitySaveChangesInterceptor _auditableEntitySaveChangesInterceptor;
-    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options, null)
-    {
-    }
+    //public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options, null)
+    //{
+    //}
 
     public ApplicationDbContext(
         DbContextOptions<ApplicationDbContext> options,
@@ -73,6 +73,16 @@ public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>, 
                 .HasForeignKey(d => d.ReceivableBatchId)
                 .OnDelete(DeleteBehavior.ClientSetNull);
 
+            entity.HasOne(d => d.Debtor)
+                .WithMany(p => p.Receivables)
+                .HasForeignKey(d => d.DebtorId)
+                .OnDelete(DeleteBehavior.ClientSetNull);
+
+            entity.HasOne(d => d.DebtorAddress)
+                .WithMany(p => p.Receivables)
+                .HasForeignKey(d => d.DebtorAddressId)
+                .OnDelete(DeleteBehavior.ClientSetNull);
+
             entity.Property(e => e.OpeningValue)
                 .HasColumnType("decimal")
                 .HasPrecision(18,2);
@@ -92,12 +102,7 @@ public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>, 
 
             entity.ToTable("ReceivableDebtor");
 
-            entity.HasOne(d => d.Receivable)
-                .WithOne(p => p.Debtor)
-                .HasForeignKey<ReceivableDebtor>(d => d.ReceivableId)
-                .OnDelete(DeleteBehavior.ClientSetNull);
-
-            entity.HasOne(p => p.DebtorAddress);
+            //entity.HasOne(p => p.DebtorAddress);
 
         });
 
@@ -111,10 +116,10 @@ public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>, 
 
             entity.ToTable("ReceivableDebtorAddress");
 
-            entity.HasOne(d => d.Debtor)
-                .WithOne(p => p.DebtorAddress)
-                .HasForeignKey<ReceivableDebtorAddress>(d => d.DebtorId)
-                .OnDelete(DeleteBehavior.ClientSetNull);
+            //entity.HasOne(d => d.Debtor)
+            //    .WithMany(p => p.DebtorAddresses)
+            //    .HasForeignKey(d => d.DebtorId)
+            //    .OnDelete(DeleteBehavior.ClientSetNull);
         });
         
         base.OnModelCreating(builder);

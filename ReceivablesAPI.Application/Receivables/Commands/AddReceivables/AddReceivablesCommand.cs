@@ -37,6 +37,56 @@ namespace ReceivablesAPI.Application.Receivables.Commands.AddReceivables;
             foreach (var receivableDto in request.Receivables.ReceivableList)
             {
                 var entity = _mapper.Map<Receivable>(receivableDto);
+
+                if (entity.Debtor.Id == 0 && !string.IsNullOrEmpty(entity.Debtor.DebtorReference))
+                {
+                    var debtorFromDb = _context.ReceivableDebtors.FirstOrDefault(d =>
+                        d.DebtorReference == entity.Debtor.DebtorReference && d.DebtorName == entity.Debtor.DebtorName);
+
+                    if (debtorFromDb is not null)
+                        entity.Debtor = debtorFromDb;
+
+                    var entityAddress = entity.DebtorAddress;
+
+                    var debtorAddressFromDb = _context.ReceivableDebtorAddresses.FirstOrDefault(da =>
+                                ((da.DebtorAddress1 == null && entityAddress.DebtorAddress1 == null) || da.DebtorAddress1 == entityAddress.DebtorAddress1)
+                                && ((da.DebtorAddress2 == null && entityAddress.DebtorAddress2 == null) || da.DebtorAddress2 == entityAddress.DebtorAddress2)
+                                && ((da.DebtorTown == null && entityAddress.DebtorTown == null) || da.DebtorTown == entityAddress.DebtorTown)
+                                && ((da.DebtorState == null && entityAddress.DebtorState == null) || da.DebtorState == entityAddress.DebtorState)
+                                && ((da.DebtorZip == null && entityAddress.DebtorZip == null) || da.DebtorZip == entityAddress.DebtorZip)
+                                && da.DebtorCountryCode == entityAddress.DebtorCountryCode
+                                && ((da.DebtorRegistrationNumber == null && entityAddress.DebtorRegistrationNumber == null) || da.DebtorRegistrationNumber == entityAddress.DebtorRegistrationNumber)
+                            );
+
+                    if (debtorAddressFromDb is not null)
+                        entity.DebtorAddress = debtorAddressFromDb;
+
+                //if (debtorFromDb is not null)
+                //{
+                //    var entityAddress = entity.DebtorAddress;
+
+                //    //if (entityAddress is not null)
+                //    //{
+                //        var debtorAddressFromDb = debtorFromDb.DebtorAddresses.FirstOrDefault(da =>
+                //            ((da.DebtorAddress1 is null && entityAddress.DebtorAddress1 is null) || da.DebtorAddress1 == entityAddress.DebtorAddress1)
+                //            && ((da.DebtorAddress2 is null && entityAddress.DebtorAddress2 is null) || da.DebtorAddress2 == entityAddress.DebtorAddress2)
+                //            && ((da.DebtorTown is null && entityAddress.DebtorTown is null) || da.DebtorTown == entityAddress.DebtorTown)
+                //            && ((da.DebtorState is null && entityAddress.DebtorState is null) || da.DebtorState == entityAddress.DebtorState)
+                //            && ((da.DebtorZip is null && entityAddress.DebtorZip is null) || da.DebtorZip == entityAddress.DebtorZip)
+                //            && da.DebtorCountryCode == entityAddress.DebtorCountryCode
+                //            && ((da.DebtorRegistrationNumber is null && entityAddress.DebtorRegistrationNumber is null) || da.DebtorRegistrationNumber == entityAddress.DebtorRegistrationNumber)
+                //        );
+
+                //        if (debtorAddressFromDb is null)
+                //            debtorFromDb.DebtorAddresses.Add(entityAddress);
+
+                //        entity.DebtorAddress = entityAddress;
+                //    //}
+
+                //    entity.Debtor = debtorFromDb;
+                
+                }
+
                 batch.Receivables.Add(entity);
                 
                 entity.AddDomainEvent(new ReceivableCreatedEvent(entity));

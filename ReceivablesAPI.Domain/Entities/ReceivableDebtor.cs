@@ -2,17 +2,15 @@
 
 public class ReceivableDebtor : BaseAuditableEntity
 {
-    //public int DebtorId { get; set; }
+    public string DebtorReference { get; set; } = string.Empty;
 
-    public int ReceivableId { get; set; }
+    public string DebtorName { get; set; } = string.Empty;
 
-    public string DebtorReference { get; set; }
+    //public IList<ReceivableDebtorAddress> DebtorAddresses { get; set; } = new List<ReceivableDebtorAddress>();
 
-    public string DebtorName { get; set; }
+    public string HashCode { get; set; } = string.Empty;
 
-    public ReceivableDebtorAddress DebtorAddress { get; set; }
-
-    public virtual Receivable Receivable { get; set; }
+    public IList<Receivable> Receivables { get; set; } = new List<Receivable>();
 
     //public virtual ReceivableDebtorAddress DebtorAddress { get; set; }
 }

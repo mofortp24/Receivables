@@ -323,6 +323,12 @@ namespace ReceivablesAPI.Infrastructure.Migrations
                     b.Property<int>("CurrencyCode")
                         .HasColumnType("int");
 
+                    b.Property<int>("DebtorAddressId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DebtorId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime?>("DueDate")
                         .HasColumnType("datetime2");
 
@@ -352,6 +358,10 @@ namespace ReceivablesAPI.Infrastructure.Migrations
 
                     b.HasKey("Id")
                         .HasName("PK_Receivable_ReceivableId");
+
+                    b.HasIndex("DebtorAddressId");
+
+                    b.HasIndex("DebtorId");
 
                     b.HasIndex("ReceivableBatchId");
 
@@ -422,14 +432,8 @@ namespace ReceivablesAPI.Infrastructure.Migrations
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ReceivableId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id")
                         .HasName("PK_ReceivableDebtor_DebtorId");
-
-                    b.HasIndex("ReceivableId")
-                        .IsUnique();
 
                     b.ToTable("ReceivableDebtor", (string)null);
                 });
@@ -457,9 +461,6 @@ namespace ReceivablesAPI.Infrastructure.Migrations
                     b.Property<int>("DebtorCountryCode")
                         .HasColumnType("int");
 
-                    b.Property<int>("DebtorId")
-                        .HasColumnType("int");
-
                     b.Property<string>("DebtorRegistrationNumber")
                         .HasColumnType("nvarchar(max)");
 
@@ -478,11 +479,13 @@ namespace ReceivablesAPI.Infrastructure.Migrations
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("ReceivableDebtorId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id")
                         .HasName("PK_ReceivableDebtorAddress_DebtorAddressId");
 
-                    b.HasIndex("DebtorId")
-                        .IsUnique();
+                    b.HasIndex("ReceivableDebtorId");
 
                     b.ToTable("ReceivableDebtorAddress", (string)null);
                 });
@@ -605,38 +608,33 @@ namespace ReceivablesAPI.Infrastructure.Migrations
 
             modelBuilder.Entity("ReceivablesAPI.Domain.Entities.Receivable", b =>
                 {
+                    b.HasOne("ReceivablesAPI.Domain.Entities.ReceivableDebtorAddress", "DebtorAddress")
+                        .WithMany("Receivables")
+                        .HasForeignKey("DebtorAddressId")
+                        .IsRequired();
+
+                    b.HasOne("ReceivablesAPI.Domain.Entities.ReceivableDebtor", "Debtor")
+                        .WithMany("Receivables")
+                        .HasForeignKey("DebtorId")
+                        .IsRequired();
+
                     b.HasOne("ReceivablesAPI.Domain.Entities.ReceivableBatch", "Batch")
                         .WithMany("Receivables")
                         .HasForeignKey("ReceivableBatchId")
                         .IsRequired();
 
                     b.Navigation("Batch");
-                });
 
-            modelBuilder.Entity("ReceivablesAPI.Domain.Entities.ReceivableDebtor", b =>
-                {
-                    b.HasOne("ReceivablesAPI.Domain.Entities.Receivable", "Receivable")
-                        .WithOne("Debtor")
-                        .HasForeignKey("ReceivablesAPI.Domain.Entities.ReceivableDebtor", "ReceivableId")
-                        .IsRequired();
+                    b.Navigation("Debtor");
 
-                    b.Navigation("Receivable");
+                    b.Navigation("DebtorAddress");
                 });
 
             modelBuilder.Entity("ReceivablesAPI.Domain.Entities.ReceivableDebtorAddress", b =>
                 {
-                    b.HasOne("ReceivablesAPI.Domain.Entities.ReceivableDebtor", "Debtor")
-                        .WithOne("DebtorAddress")
-                        .HasForeignKey("ReceivablesAPI.Domain.Entities.ReceivableDebtorAddress", "DebtorId")
-                        .IsRequired();
-
-                    b.Navigation("Debtor");
-                });
-
-            modelBuilder.Entity("ReceivablesAPI.Domain.Entities.Receivable", b =>
-                {
-                    b.Navigation("Debtor")
-                        .IsRequired();
+                    b.HasOne("ReceivablesAPI.Domain.Entities.ReceivableDebtor", null)
+                        .WithMany("DebtorAddresses")
+                        .HasForeignKey("ReceivableDebtorId");
                 });
 
             modelBuilder.Entity("ReceivablesAPI.Domain.Entities.ReceivableBatch", b =>
@@ -646,8 +644,14 @@ namespace ReceivablesAPI.Infrastructure.Migrations
 
             modelBuilder.Entity("ReceivablesAPI.Domain.Entities.ReceivableDebtor", b =>
                 {
-                    b.Navigation("DebtorAddress")
-                        .IsRequired();
+                    b.Navigation("DebtorAddresses");
+
+                    b.Navigation("Receivables");
+                });
+
+            modelBuilder.Entity("ReceivablesAPI.Domain.Entities.ReceivableDebtorAddress", b =>
+                {
+                    b.Navigation("Receivables");
                 });
 #pragma warning restore 612, 618
         }

@@ -125,6 +125,24 @@ namespace ReceivablesAPI.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ReceivableDebtor",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    DebtorReference = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DebtorName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LastModified = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ReceivableDebtor_DebtorId", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -231,6 +249,35 @@ namespace ReceivablesAPI.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ReceivableDebtorAddress",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    DebtorAddress1 = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DebtorAddress2 = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DebtorTown = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DebtorState = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DebtorZip = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DebtorCountryCode = table.Column<int>(type: "int", nullable: false),
+                    DebtorRegistrationNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ReceivableDebtorId = table.Column<int>(type: "int", nullable: true),
+                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LastModified = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ReceivableDebtorAddress_DebtorAddressId", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ReceivableDebtorAddress_ReceivableDebtor_ReceivableDebtorId",
+                        column: x => x.ReceivableDebtorId,
+                        principalTable: "ReceivableDebtor",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Receivable",
                 columns: table => new
                 {
@@ -240,11 +287,13 @@ namespace ReceivablesAPI.Infrastructure.Migrations
                     Reference = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CurrencyCode = table.Column<int>(type: "int", nullable: false),
                     IssueDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    OpeningValue = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    PaidValue = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    OpeningValue = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
+                    PaidValue = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
                     DueDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     ClosedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Cancelled = table.Column<bool>(type: "bit", nullable: true),
+                    DebtorId = table.Column<int>(type: "int", nullable: false),
+                    DebtorAddressId = table.Column<int>(type: "int", nullable: false),
                     Created = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastModified = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -258,56 +307,13 @@ namespace ReceivablesAPI.Infrastructure.Migrations
                         column: x => x.ReceivableBatchId,
                         principalTable: "ReceivableBatch",
                         principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ReceivableDebtor",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ReceivableId = table.Column<int>(type: "int", nullable: false),
-                    DebtorReference = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DebtorName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LastModified = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ReceivableDebtor_DebtorId", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ReceivableDebtor_Receivable_ReceivableId",
-                        column: x => x.ReceivableId,
-                        principalTable: "Receivable",
+                        name: "FK_Receivable_ReceivableDebtorAddress_DebtorAddressId",
+                        column: x => x.DebtorAddressId,
+                        principalTable: "ReceivableDebtorAddress",
                         principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ReceivableDebtorAddress",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    DebtorId = table.Column<int>(type: "int", nullable: false),
-                    DebtorAddress1 = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DebtorAddress2 = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DebtorTown = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DebtorState = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DebtorZip = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DebtorCountryCode = table.Column<int>(type: "int", nullable: false),
-                    DebtorRegistrationNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LastModified = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ReceivableDebtorAddress_DebtorAddressId", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ReceivableDebtorAddress_ReceivableDebtor_DebtorId",
+                        name: "FK_Receivable_ReceivableDebtor_DebtorId",
                         column: x => x.DebtorId,
                         principalTable: "ReceivableDebtor",
                         principalColumn: "Id");
@@ -389,6 +395,16 @@ namespace ReceivablesAPI.Infrastructure.Migrations
                 columns: new[] { "SubjectId", "SessionId", "Type" });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Receivable_DebtorAddressId",
+                table: "Receivable",
+                column: "DebtorAddressId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Receivable_DebtorId",
+                table: "Receivable",
+                column: "DebtorId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Receivable_ReceivableBatchId",
                 table: "Receivable",
                 column: "ReceivableBatchId");
@@ -406,16 +422,9 @@ namespace ReceivablesAPI.Infrastructure.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_ReceivableDebtor_ReceivableId",
-                table: "ReceivableDebtor",
-                column: "ReceivableId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ReceivableDebtorAddress_DebtorId",
+                name: "IX_ReceivableDebtorAddress_ReceivableDebtorId",
                 table: "ReceivableDebtorAddress",
-                column: "DebtorId",
-                unique: true);
+                column: "ReceivableDebtorId");
         }
 
         /// <inheritdoc />
@@ -446,7 +455,7 @@ namespace ReceivablesAPI.Infrastructure.Migrations
                 name: "PersistedGrants");
 
             migrationBuilder.DropTable(
-                name: "ReceivableDebtorAddress");
+                name: "Receivable");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
@@ -455,13 +464,13 @@ namespace ReceivablesAPI.Infrastructure.Migrations
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "ReceivableDebtor");
-
-            migrationBuilder.DropTable(
-                name: "Receivable");
-
-            migrationBuilder.DropTable(
                 name: "ReceivableBatch");
+
+            migrationBuilder.DropTable(
+                name: "ReceivableDebtorAddress");
+
+            migrationBuilder.DropTable(
+                name: "ReceivableDebtor");
         }
     }
 }
