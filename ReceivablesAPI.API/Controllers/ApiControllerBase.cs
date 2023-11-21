@@ -6,7 +6,7 @@ namespace ReceivablesAPI.WebUI.Controllers;
 
 [ApiController]
 [ApiExceptionFilter]
-[Route("api/[controller]/[action]")]
+[Route("api/[controller]")]
 public abstract class ApiControllerBase : ControllerBase
 {
     private ISender? _mediator;
