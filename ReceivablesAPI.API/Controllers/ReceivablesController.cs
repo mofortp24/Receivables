@@ -1,11 +1,14 @@
 ﻿using System.Runtime.Serialization;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ReceivablesAPI.Application.Receivables.Commands.AddReceivables;
+using ReceivablesAPI.Application.Receivables.Queries.GetReceivablesSummary;
 using ReceivablesAPI.WebUI.Controllers;
 
 namespace ReceivablesAPI.API.Controllers
 {
+    //[Authorize()]
     public class ReceivablesController : ApiControllerBase
     {
         private readonly IMediator _mediator;
@@ -16,30 +19,17 @@ namespace ReceivablesAPI.API.Controllers
         }
 
         
-        [HttpPost]
+        [HttpPost("[action]")]
         public async Task<string> Add(AddReceivablesCommand command)
         {
             return await Mediator.Send(command);
 
         }
 
-        //[HttpGet("summary")]
-        //public async Task<IActionResult> GetReceivablesSummary()
-        //{
-        //    // Retrieve the stored receivables data from your data store
-
-        //    // Calculate the summary statistics
-        //    decimal openInvoicesValue = 0;
-        //    decimal closedInvoicesValue = 0;
-        //    // Calculate the summary statistics based on the stored data
-
-        //    var summary = new ReceivableSummary
-        //    {
-        //        OpenInvoicesValue = openInvoicesValue,
-        //        ClosedInvoicesValue = closedInvoicesValue
-        //    };
-
-        //    return Ok(new ReceivableSummaryResponse { Summary = summary });
-        //}
+        [HttpPost("/stats/[action]")]
+        public async Task<ActionResult<ReceivablesSummary>> GetReceivablesSummary([FromQuery] GetReceivablesSummaryQuery query)
+        {
+            return await Mediator.Send(query);
+        }
     }
 }
