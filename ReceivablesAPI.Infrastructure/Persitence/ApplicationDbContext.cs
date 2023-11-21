@@ -17,9 +17,6 @@ public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>, 
 {
     private readonly IMediator _mediator;
     private readonly AuditableEntitySaveChangesInterceptor _auditableEntitySaveChangesInterceptor;
-    //public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options, null)
-    //{
-    //}
 
     public ApplicationDbContext(
         DbContextOptions<ApplicationDbContext> options,
@@ -39,7 +36,7 @@ public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>, 
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
-        builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+        //builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
         builder.Entity<ReceivableBatch>(entity =>
         {
@@ -101,9 +98,6 @@ public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>, 
                 .ValueGeneratedOnAdd();
 
             entity.ToTable("ReceivableDebtor");
-
-            //entity.HasOne(p => p.DebtorAddress);
-
         });
 
         builder.Entity<ReceivableDebtorAddress>(entity =>
@@ -115,11 +109,6 @@ public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>, 
                 .ValueGeneratedOnAdd();
 
             entity.ToTable("ReceivableDebtorAddress");
-
-            //entity.HasOne(d => d.Debtor)
-            //    .WithMany(p => p.DebtorAddresses)
-            //    .HasForeignKey(d => d.DebtorId)
-            //    .OnDelete(DeleteBehavior.ClientSetNull);
         });
         
         base.OnModelCreating(builder);
