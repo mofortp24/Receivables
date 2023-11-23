@@ -18,10 +18,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Model\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\ReceivablesAPI.Application\ReceivablesAPI.Application.csproj" />
     <ProjectReference Include="..\ReceivablesAPI.Infrastructure\ReceivablesAPI.Infrastructure.csproj" />
   </ItemGroup>

@@ -2,35 +2,30 @@ using ReceivablesAPI.Infrastructure.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Adding services to the container.
 builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureServices(builder.Configuration);
 builder.Services.AddWebApiServices(builder.Configuration);
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Configuring the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 
     app.UseDeveloperExceptionPage();
-    //app.UseMigrationsEndPoint();
 
-    // Initialise and seed database
-    using (var scope = app.Services.CreateScope())
-    {
-        var initializer = scope.ServiceProvider.GetRequiredService<ApplicationDbContextInitializer>();
-        await initializer.InitialiseAsync();
-        await initializer.SeedAsync();
-    }
-    
+    // DB seed
+    using var scope = app.Services.CreateScope();
+    var initializer = scope.ServiceProvider.GetRequiredService<ApplicationDbContextInitializer>();
+    await initializer.InitialiseAsync();
+    await initializer.SeedAsync();
 }
 
 app.UseHttpsRedirection();

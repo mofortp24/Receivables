@@ -2,7 +2,7 @@
 
 namespace ReceivablesAPI.Domain.Enums;
 /// <summary>
-/// States and Territories of the US
+/// Country Codes accepted by the API
 /// </summary>
 public enum CountryCode
 {

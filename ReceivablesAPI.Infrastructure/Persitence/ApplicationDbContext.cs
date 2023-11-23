@@ -8,8 +8,6 @@ using MediatR;
 using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using static IdentityModel.ClaimComparer;
-using System;
 
 namespace ReceivablesAPI.Infrastructure.Persistence;
 
@@ -36,81 +34,8 @@ public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>, 
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
-        //builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+        builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
-        builder.Entity<ReceivableBatch>(entity =>
-        {
-            entity.HasKey(b => b.Id)
-                .HasName("PK_ReceivableBatch_ReceivableBatchId");
-
-            entity.Property(p => p.Id)
-                .ValueGeneratedOnAdd();
-
-            entity.ToTable("ReceivableBatch");
-
-            entity.HasIndex(e => e.Id, "UQ_ReceivableBatch_ReceivableBatchId")
-                .IsUnique();
-
-            entity.HasIndex(e => e.BatchReference, "UQ_ReceivableBatch_Reference")
-                .IsUnique();
-        });
-
-        builder.Entity<Receivable>(entity =>
-        {
-            entity.HasKey(e => e.Id)
-                .HasName("PK_Receivable_ReceivableId");
-
-            entity.Property(p => p.Id)
-                .ValueGeneratedOnAdd();
-
-            entity.ToTable("Receivable");
-
-            entity.HasOne(d => d.Batch)
-                .WithMany(p => p.Receivables)
-                .HasForeignKey(d => d.ReceivableBatchId)
-                .OnDelete(DeleteBehavior.ClientSetNull);
-
-            entity.HasOne(d => d.Debtor)
-                .WithMany(p => p.Receivables)
-                .HasForeignKey(d => d.DebtorId)
-                .OnDelete(DeleteBehavior.ClientSetNull);
-
-            entity.HasOne(d => d.DebtorAddress)
-                .WithMany(p => p.Receivables)
-                .HasForeignKey(d => d.DebtorAddressId)
-                .OnDelete(DeleteBehavior.ClientSetNull);
-
-            entity.Property(e => e.OpeningValue)
-                .HasColumnType("decimal")
-                .HasPrecision(18,2);
-            entity.Property(e => e.PaidValue)
-                .HasColumnType("decimal")
-                .HasPrecision(18,2);
-
-        });
-
-        builder.Entity<ReceivableDebtor>(entity =>
-        {
-            entity.HasKey(e => e.Id)
-                .HasName("PK_ReceivableDebtor_DebtorId");
-
-            entity.Property(p => p.Id)
-                .ValueGeneratedOnAdd();
-
-            entity.ToTable("ReceivableDebtor");
-        });
-
-        builder.Entity<ReceivableDebtorAddress>(entity =>
-        {
-            entity.HasKey(e => e.Id)
-                .HasName("PK_ReceivableDebtorAddress_DebtorAddressId");
-
-            entity.Property(p => p.Id)
-                .ValueGeneratedOnAdd();
-
-            entity.ToTable("ReceivableDebtorAddress");
-        });
-        
         base.OnModelCreating(builder);
     }
 

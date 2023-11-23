@@ -1,6 +1,4 @@
-﻿using System.Runtime.Serialization;
-using MediatR;
-using Microsoft.AspNetCore.Authorization;
+﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using ReceivablesAPI.Application.Receivables.Commands.AddReceivables;
 using ReceivablesAPI.Application.Receivables.Queries.GetReceivablesSummary;
@@ -8,7 +6,6 @@ using ReceivablesAPI.WebUI.Controllers;
 
 namespace ReceivablesAPI.API.Controllers
 {
-    //[Authorize()]
     public class ReceivablesController : ApiControllerBase
     {
         private readonly IMediator _mediator;
@@ -18,7 +15,6 @@ namespace ReceivablesAPI.API.Controllers
             _mediator = mediator;
         }
 
-        
         [HttpPost("[action]")]
         public async Task<string> Add(AddReceivablesCommand command)
         {

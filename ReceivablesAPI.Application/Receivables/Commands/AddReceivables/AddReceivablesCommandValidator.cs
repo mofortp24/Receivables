@@ -1,6 +1,5 @@
 ﻿using FluentValidation;
 using ReceivablesAPI.Application.Common.Providers;
-using ReceivablesAPI.Application.Receivables.Commands.AddReceivables.Dto;
 
 namespace ReceivablesAPI.Application.Receivables.Commands.AddReceivables;
 public class AddReceivablesCommandValidator : AbstractValidator<AddReceivablesCommand>

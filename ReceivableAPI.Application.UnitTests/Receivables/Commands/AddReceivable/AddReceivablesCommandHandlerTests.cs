@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AutoMapper;
-using Azure.Core;
+﻿using AutoMapper;
 using FakeItEasy;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
 using ReceivablesAPI.Application.Common.Interfaces;
 using ReceivablesAPI.Application.Common.Mapping;
 using ReceivablesAPI.Application.Common.Providers;
@@ -33,13 +26,28 @@ public class AddReceivablesCommandHandlerTests
     {
         _dbContext = A.Fake<DbContext>();
         _context = A.Fake<IApplicationDbContext>();
-        //_mapper = A.Fake<IMapper>();
         _configuration = new MapperConfiguration(config => 
             config.AddProfile<MappingProfile>());
 
         _mapper = _configuration.CreateMapper();
         _batchReferenceProvider = new BatchReferenceProvider();
     
+    }
+
+    private DbSet<T> PrepareFakeDbSet<T>(List<T> collectionUnderFakeDbSet)  where T : class
+    {
+        var fakeDbSet = A.Fake<DbSet<T>>(options => options.Implements(typeof(IQueryable<T>)));
+        A.CallTo(() => ((IQueryable<T>)fakeDbSet).Provider).Returns(collectionUnderFakeDbSet.AsQueryable().Provider);
+        A.CallTo(() => ((IQueryable<T>)fakeDbSet).Expression).Returns(collectionUnderFakeDbSet.AsQueryable().Expression);
+        A.CallTo(() => ((IQueryable<T>)fakeDbSet).ElementType).Returns(collectionUnderFakeDbSet.AsQueryable().ElementType);
+        A.CallTo(() => ((IQueryable<T>)fakeDbSet).GetEnumerator()).Returns(collectionUnderFakeDbSet.GetEnumerator());
+
+        A.CallTo(() => fakeDbSet.Add(A<T>._)).Invokes((T receivableBatch) =>
+        {
+            collectionUnderFakeDbSet.Add(receivableBatch);
+        });
+
+        return fakeDbSet;
     }
 
     [Test]
@@ -49,20 +57,9 @@ public class AddReceivablesCommandHandlerTests
         // Arrange
         // Receivable Batches
         var receivableBatches = new List<ReceivableBatch>();
-
-        var fakeReceivableBatchSet = A.Fake<DbSet<ReceivableBatch>>(options => options.Implements(typeof(IQueryable<ReceivableBatch>)));
-        A.CallTo(() => ((IQueryable<ReceivableBatch>)fakeReceivableBatchSet).Provider).Returns(receivableBatches.AsQueryable().Provider);
-        A.CallTo(() => ((IQueryable<ReceivableBatch>)fakeReceivableBatchSet).Expression).Returns(receivableBatches.AsQueryable().Expression);
-        A.CallTo(() => ((IQueryable<ReceivableBatch>)fakeReceivableBatchSet).ElementType).Returns(receivableBatches.AsQueryable().ElementType);
-        A.CallTo(() => ((IQueryable<ReceivableBatch>)fakeReceivableBatchSet).GetEnumerator()).Returns(receivableBatches.GetEnumerator());
-
+        var fakeReceivableBatchSet = this.PrepareFakeDbSet<ReceivableBatch>(receivableBatches);
         A.CallTo(() => _context.ReceivableBatches).Returns(fakeReceivableBatchSet);
-
-        A.CallTo(() => fakeReceivableBatchSet.Add(A<ReceivableBatch>._)).Invokes((ReceivableBatch receivableBatch) =>
-        {
-            receivableBatches.Add(receivableBatch);
-        });
-
+        
         // Receivables
         var receivables = new List<Receivable>()
         {
@@ -95,67 +92,24 @@ public class AddReceivablesCommandHandlerTests
             }
         };
 
-        var fakeReceivableSet = A.Fake<DbSet<Receivable>>(options => options.Implements(typeof(IQueryable<Receivable>)));
-        A.CallTo(() => ((IQueryable<Receivable>)fakeReceivableSet).Provider).Returns(receivables.AsQueryable().Provider);
-        A.CallTo(() => ((IQueryable<Receivable>)fakeReceivableSet).Expression).Returns(receivables.AsQueryable().Expression);
-        A.CallTo(() => ((IQueryable<Receivable>)fakeReceivableSet).ElementType).Returns(receivables.AsQueryable().ElementType);
-        A.CallTo(() => ((IQueryable<Receivable>)fakeReceivableSet).GetEnumerator()).Returns(receivables.GetEnumerator());
-
+        var fakeReceivableSet = this.PrepareFakeDbSet<Receivable>(receivables);
         A.CallTo(() => _context.Receivables).Returns(fakeReceivableSet);
-
-        A.CallTo(() => fakeReceivableSet.Add(A<Receivable>._)).Invokes((Receivable receivable) =>
-        {
-            receivables.Add(receivable);
-        });
-
+        
         // Receivable Debtors
         var receivableDebtors = new List<ReceivableDebtor>(){ 
-            new ReceivableDebtor()
-            {
-                Id = 2,
-                DebtorReference = "DebtorReference_1",
-                DebtorName = "DebtorName_1"
-            }
+            receivables.First().Debtor
         };
         
-        var fakeReceivableDebtorSet = A.Fake<DbSet<ReceivableDebtor>>(options => options.Implements(typeof(IQueryable<ReceivableDebtor>)));;
-
-        A.CallTo(() => ((IQueryable<ReceivableDebtor>)fakeReceivableDebtorSet).Provider).Returns(receivableDebtors.AsQueryable().Provider);
-        A.CallTo(() => ((IQueryable<ReceivableDebtor>)fakeReceivableDebtorSet).Expression).Returns(receivableDebtors.AsQueryable().Expression);
-        A.CallTo(() => ((IQueryable<ReceivableDebtor>)fakeReceivableDebtorSet).ElementType).Returns(receivableDebtors.AsQueryable().ElementType);
-        A.CallTo(() => ((IQueryable<ReceivableDebtor>)fakeReceivableDebtorSet).GetEnumerator()).Returns(receivableDebtors.GetEnumerator());
-
+        var fakeReceivableDebtorSet = this.PrepareFakeDbSet<ReceivableDebtor>(receivableDebtors);
         A.CallTo(() => _context.ReceivableDebtors).Returns(fakeReceivableDebtorSet);
-
-        A.CallTo(() => fakeReceivableDebtorSet.Add(A<ReceivableDebtor>._)).Invokes((ReceivableDebtor receivableDebtor) =>
-        {
-            receivableDebtors.Add(receivableDebtor);
-        });
 
         // Receivable Debtors Addresses
         var receivableDebtorAddresses = new List<ReceivableDebtorAddress>(){ 
-            new ReceivableDebtorAddress()
-            {
-                Id = 5,
-                DebtorAddress1 = "DebtorAddress1_1", 
-                DebtorAddress2 = "DebtorAddress1_2",
-                DebtorCountryCode = CountryCode.PL,
-            }
+            receivables.First().DebtorAddress
         };
 
-        var fakeReceivableDebtorAddressAddressSet = A.Fake<DbSet<ReceivableDebtorAddress>>(options => options.Implements(typeof(IQueryable<ReceivableDebtorAddress>)));;
-
-        A.CallTo(() => ((IQueryable<ReceivableDebtorAddress>)fakeReceivableDebtorAddressAddressSet).Provider).Returns(receivableDebtorAddresses.AsQueryable().Provider);
-        A.CallTo(() => ((IQueryable<ReceivableDebtorAddress>)fakeReceivableDebtorAddressAddressSet).Expression).Returns(receivableDebtorAddresses.AsQueryable().Expression);
-        A.CallTo(() => ((IQueryable<ReceivableDebtorAddress>)fakeReceivableDebtorAddressAddressSet).ElementType).Returns(receivableDebtorAddresses.AsQueryable().ElementType);
-        A.CallTo(() => ((IQueryable<ReceivableDebtorAddress>)fakeReceivableDebtorAddressAddressSet).GetEnumerator()).Returns(receivableDebtorAddresses.GetEnumerator());
-
+        var fakeReceivableDebtorAddressAddressSet = this.PrepareFakeDbSet<ReceivableDebtorAddress>(receivableDebtorAddresses);
         A.CallTo(() => _context.ReceivableDebtorAddresses).Returns(fakeReceivableDebtorAddressAddressSet);
-
-        A.CallTo(() => fakeReceivableDebtorAddressAddressSet.Add(A<ReceivableDebtorAddress>._)).Invokes((ReceivableDebtorAddress receivableDebtorAddress) =>
-        {
-            receivableDebtorAddresses.Add(receivableDebtorAddress);
-        });
 
         var request= new AddReceivablesCommand()
         {
@@ -163,7 +117,7 @@ public class AddReceivablesCommandHandlerTests
             {
                 ReceivableList = new List<ReceivableDto>()
                 {
-                    new () { Reference = "REF-2", DebtorReference = "DebtorReference_1", DebtorName = "DebtorName_1", DebtorAddress1 = "DebtorAddress1_1", DebtorAddress2 = "DebtorAddress1_2", DebtorCountryCode = "PL" }
+                    new () { Reference = "NEW-REF-2", DebtorReference = "DebtorReference_NEW", DebtorName = "DebtorName_1", DebtorAddress1 = "DebtorAddress1_NEW", DebtorAddress2 = "DebtorAddress1_2", DebtorCountryCode = "PL" }
                 }
             }
         };
@@ -182,7 +136,105 @@ public class AddReceivablesCommandHandlerTests
         // Assert
         Assert.IsNotNull(result);
 
-        A.CallTo(() => _context.ReceivableBatches.Add(null)).WithAnyArguments().MustHaveHappenedOnceExactly();
+        A.CallTo(() => _context.ReceivableBatches.Add(null!)).WithAnyArguments().MustHaveHappenedOnceExactly();
+
+        Assert.That(() => _batchReferenceProvider.GenerateNextBatchReference<Receivable>(default).Length == result.Length);
+        Assert.That(() => ++noOfReceivableBatchesBefore == _context.ReceivableBatches.Count());
+
+        Assert.That(() => 1 ==_context.ReceivableBatches.Count(b => b.Receivables.Any(r => r.DomainEvents.Any(de => de.GetType() == typeof(ReceivableCreatedEvent)))));
+
+        Assert.That(() => 1 ==_context.ReceivableBatches.Count(b => b.Receivables.Any(r => r.DomainEvents.Any(de => de.GetType() == typeof(ReceivableDebtorCreatedEvent)))));
+        Assert.That(() => 1 ==_context.ReceivableBatches.Count(b => b.Receivables.Any(r => r.DomainEvents.Any(de => de.GetType() == typeof(ReceivableDebtorAddressCreatedEvent)))));
+
+        A.CallTo(() => _context.SaveChangesAsync(default)).WithAnyArguments().MustHaveHappenedOnceExactly();
+    }
+
+    [Test]
+    public async Task Handler_Should_Add_New_Receivable_Find_Existing_Debtor_And_Existing_Debtor_Address()
+    {
+        // Arrange
+        // Receivable Batches
+        var receivableBatches = new List<ReceivableBatch>();
+        var fakeReceivableBatchSet = this.PrepareFakeDbSet<ReceivableBatch>(receivableBatches);
+        A.CallTo(() => _context.ReceivableBatches).Returns(fakeReceivableBatchSet);
+        
+        // Receivables
+        var receivables = new List<Receivable>()
+        {
+            new Receivable()
+            {
+                Id = 1,
+                Batch = new ReceivableBatch()
+                {
+                    Id = 1,
+                    BatchReference = "BATCH-1"
+                },
+                Reference = "REF-01",
+                    
+                DebtorId = 2,
+                Debtor = new ReceivableDebtor()
+                {
+                    Id = 2,
+                    DebtorReference = "DebtorReference_1", 
+                    DebtorName = "DebtorName_1"
+                },
+                DebtorAddressId = 5,
+                DebtorAddress = new ReceivableDebtorAddress()
+                {
+                    Id = 5,
+                    DebtorAddress1 = "DebtorAddress1_1", 
+                    DebtorAddress2 = "DebtorAddress1_2",
+                    DebtorCountryCode = CountryCode.PL,
+                }
+                    
+            }
+        };
+
+        var fakeReceivableSet = this.PrepareFakeDbSet<Receivable>(receivables);
+        A.CallTo(() => _context.Receivables).Returns(fakeReceivableSet);
+        
+        // Receivable Debtors
+        var receivableDebtors = new List<ReceivableDebtor>(){ 
+            receivables.First().Debtor
+        };
+        
+        var fakeReceivableDebtorSet = this.PrepareFakeDbSet<ReceivableDebtor>(receivableDebtors);
+        A.CallTo(() => _context.ReceivableDebtors).Returns(fakeReceivableDebtorSet);
+
+        // Receivable Debtors Addresses
+        var receivableDebtorAddresses = new List<ReceivableDebtorAddress>(){ 
+            receivables.First().DebtorAddress
+        };
+
+        var fakeReceivableDebtorAddressAddressSet = this.PrepareFakeDbSet<ReceivableDebtorAddress>(receivableDebtorAddresses);
+        A.CallTo(() => _context.ReceivableDebtorAddresses).Returns(fakeReceivableDebtorAddressAddressSet);
+
+        var request= new AddReceivablesCommand()
+        {
+            Receivables = new ReceivablesDto()
+            {
+                ReceivableList = new List<ReceivableDto>()
+                {
+                    new () { Reference = "NEW-REF-1", DebtorReference = "DebtorReference_1", DebtorName = "DebtorName_1", DebtorAddress1 = "DebtorAddress1_1", DebtorAddress2 = "DebtorAddress1_2", DebtorCountryCode = "PL" }
+                }
+            }
+        };
+
+        A.CallTo(() => _context.SaveChangesAsync(default))
+            .Returns(Task.FromResult(0));
+
+        
+        var handler = new AddReceivablesCommandHandler(_context, _mapper, _batchReferenceProvider);
+
+        var noOfReceivableBatchesBefore = _context.ReceivableBatches.Count();
+
+        // Act
+        var result = await handler.Handle(request, default).ConfigureAwait(false);
+
+        // Assert
+        Assert.IsNotNull(result);
+
+        A.CallTo(() => _context.ReceivableBatches.Add(null!)).WithAnyArguments().MustHaveHappenedOnceExactly();
 
         Assert.That(() => _batchReferenceProvider.GenerateNextBatchReference<Receivable>(default).Length == result.Length);
         Assert.That(() => ++noOfReceivableBatchesBefore == _context.ReceivableBatches.Count());
@@ -196,8 +248,100 @@ public class AddReceivablesCommandHandlerTests
     }
 
     [Test]
-    public void Handler_Should_Add_New_Receivable_Find_Existing_Debtor_And_Existing_Debtor_Address() { }
+    public async Task Handler_Should_Add_New_Receivable_Find_Existing_Debtor_And_Add_New_Debtor_Address()
+    {
+        // Arrange
+        // Receivable Batches
+        var receivableBatches = new List<ReceivableBatch>();
+        var fakeReceivableBatchSet = this.PrepareFakeDbSet<ReceivableBatch>(receivableBatches);
+        A.CallTo(() => _context.ReceivableBatches).Returns(fakeReceivableBatchSet);
+        
+        // Receivables
+        var receivables = new List<Receivable>()
+        {
+            new Receivable()
+            {
+                Id = 1,
+                Batch = new ReceivableBatch()
+                {
+                    Id = 1,
+                    BatchReference = "BATCH-1"
+                },
+                Reference = "REF-01",
+                    
+                DebtorId = 2,
+                Debtor = new ReceivableDebtor()
+                {
+                    Id = 2,
+                    DebtorReference = "DebtorReference_1", 
+                    DebtorName = "DebtorName_1"
+                },
+                DebtorAddressId = 5,
+                DebtorAddress = new ReceivableDebtorAddress()
+                {
+                    Id = 5,
+                    DebtorAddress1 = "DebtorAddress1_1", 
+                    DebtorAddress2 = "DebtorAddress1_2",
+                    DebtorCountryCode = CountryCode.PL,
+                }
+                    
+            }
+        };
 
-    [Test]
-    public void Handler_Should_Add_New_Receivable_Find_Existing_Debtor_And_Add_New_Debtor_Address() { }
+        var fakeReceivableSet = this.PrepareFakeDbSet<Receivable>(receivables);
+        A.CallTo(() => _context.Receivables).Returns(fakeReceivableSet);
+        
+        // Receivable Debtors
+        var receivableDebtors = new List<ReceivableDebtor>(){ 
+            receivables.First().Debtor
+        };
+        
+        var fakeReceivableDebtorSet = this.PrepareFakeDbSet<ReceivableDebtor>(receivableDebtors);
+        A.CallTo(() => _context.ReceivableDebtors).Returns(fakeReceivableDebtorSet);
+
+        // Receivable Debtors Addresses
+        var receivableDebtorAddresses = new List<ReceivableDebtorAddress>(){ 
+            receivables.First().DebtorAddress
+        };
+
+        var fakeReceivableDebtorAddressAddressSet = this.PrepareFakeDbSet<ReceivableDebtorAddress>(receivableDebtorAddresses);
+        A.CallTo(() => _context.ReceivableDebtorAddresses).Returns(fakeReceivableDebtorAddressAddressSet);
+
+        var request= new AddReceivablesCommand()
+        {
+            Receivables = new ReceivablesDto()
+            {
+                ReceivableList = new List<ReceivableDto>()
+                {
+                    new () { Reference = "NEW-REF-1", DebtorReference = "DebtorReference_1", DebtorName = "DebtorName_1", DebtorAddress1 = "DebtorAddress1_1", DebtorAddress2 = "DebtorAddress1_NEW", DebtorCountryCode = "PL" }
+                }
+            }
+        };
+
+        A.CallTo(() => _context.SaveChangesAsync(default))
+            .Returns(Task.FromResult(0));
+
+        
+        var handler = new AddReceivablesCommandHandler(_context, _mapper, _batchReferenceProvider);
+
+        var noOfReceivableBatchesBefore = _context.ReceivableBatches.Count();
+
+        // Act
+        var result = await handler.Handle(request, default).ConfigureAwait(false);
+
+        // Assert
+        Assert.IsNotNull(result);
+
+        A.CallTo(() => _context.ReceivableBatches.Add(null!)).WithAnyArguments().MustHaveHappenedOnceExactly();
+
+        Assert.That(() => _batchReferenceProvider.GenerateNextBatchReference<Receivable>(default).Length == result.Length);
+        Assert.That(() => ++noOfReceivableBatchesBefore == _context.ReceivableBatches.Count());
+
+        Assert.That(() => 1 ==_context.ReceivableBatches.Count(b => b.Receivables.Any(r => r.DomainEvents.Any(de => de.GetType() == typeof(ReceivableCreatedEvent)))));
+
+        Assert.That(() => 0 ==_context.ReceivableBatches.Count(b => b.Receivables.Any(r => r.DomainEvents.Any(de => de.GetType() == typeof(ReceivableDebtorCreatedEvent)))));
+        Assert.That(() => 1 ==_context.ReceivableBatches.Count(b => b.Receivables.Any(r => r.DomainEvents.Any(de => de.GetType() == typeof(ReceivableDebtorAddressCreatedEvent)))));
+
+        A.CallTo(() => _context.SaveChangesAsync(default)).WithAnyArguments().MustHaveHappenedOnceExactly();
+    }
 }

@@ -12,7 +12,7 @@ using ReceivablesAPI.Infrastructure.Persistence;
 namespace ReceivablesAPI.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231121172532_InitialMigration_v1")]
+    [Migration("20231123200918_InitialMigration_v1")]
     partial class InitialMigration_v1
     {
         /// <inheritdoc />
@@ -321,7 +321,8 @@ namespace ReceivablesAPI.Infrastructure.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(75)
+                        .HasColumnType("nvarchar(75)");
 
                     b.Property<int>("CurrencyCode")
                         .HasColumnType("int");
@@ -333,16 +334,19 @@ namespace ReceivablesAPI.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("DueDate")
+                        .IsRequired()
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("IssueDate")
+                        .IsRequired()
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(75)
+                        .HasColumnType("nvarchar(75)");
 
                     b.Property<decimal>("OpeningValue")
                         .HasPrecision(18, 2)
@@ -357,7 +361,8 @@ namespace ReceivablesAPI.Infrastructure.Migrations
 
                     b.Property<string>("Reference")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id")
                         .HasName("PK_Receivable_ReceivableId");
@@ -381,19 +386,22 @@ namespace ReceivablesAPI.Infrastructure.Migrations
 
                     b.Property<string>("BatchReference")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(75)
+                        .HasColumnType("nvarchar(75)");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(75)
+                        .HasColumnType("nvarchar(75)");
 
                     b.HasKey("Id")
                         .HasName("PK_ReceivableBatch_ReceivableBatchId");
@@ -419,21 +427,25 @@ namespace ReceivablesAPI.Infrastructure.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(75)
+                        .HasColumnType("nvarchar(75)");
 
                     b.Property<string>("DebtorName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("DebtorReference")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(75)
+                        .HasColumnType("nvarchar(75)");
 
                     b.HasKey("Id")
                         .HasName("PK_ReceivableDebtor_DebtorId");
@@ -453,42 +465,45 @@ namespace ReceivablesAPI.Infrastructure.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(75)
+                        .HasColumnType("nvarchar(75)");
 
                     b.Property<string>("DebtorAddress1")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
 
                     b.Property<string>("DebtorAddress2")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
 
                     b.Property<int>("DebtorCountryCode")
                         .HasColumnType("int");
 
                     b.Property<string>("DebtorRegistrationNumber")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(15)
+                        .HasColumnType("nvarchar(15)");
 
                     b.Property<string>("DebtorState")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("DebtorTown")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("DebtorZip")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("ReceivableDebtorId")
-                        .HasColumnType("int");
+                        .HasMaxLength(75)
+                        .HasColumnType("nvarchar(75)");
 
                     b.HasKey("Id")
                         .HasName("PK_ReceivableDebtorAddress_DebtorAddressId");
-
-                    b.HasIndex("ReceivableDebtorId");
 
                     b.ToTable("ReceivableDebtorAddress", (string)null);
                 });
@@ -633,13 +648,6 @@ namespace ReceivablesAPI.Infrastructure.Migrations
                     b.Navigation("DebtorAddress");
                 });
 
-            modelBuilder.Entity("ReceivablesAPI.Domain.Entities.ReceivableDebtorAddress", b =>
-                {
-                    b.HasOne("ReceivablesAPI.Domain.Entities.ReceivableDebtor", null)
-                        .WithMany("DebtorAddresses")
-                        .HasForeignKey("ReceivableDebtorId");
-                });
-
             modelBuilder.Entity("ReceivablesAPI.Domain.Entities.ReceivableBatch", b =>
                 {
                     b.Navigation("Receivables");
@@ -647,8 +655,6 @@ namespace ReceivablesAPI.Infrastructure.Migrations
 
             modelBuilder.Entity("ReceivablesAPI.Domain.Entities.ReceivableDebtor", b =>
                 {
-                    b.Navigation("DebtorAddresses");
-
                     b.Navigation("Receivables");
                 });
 
