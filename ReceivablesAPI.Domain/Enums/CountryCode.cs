@@ -6,6 +6,7 @@ namespace ReceivablesAPI.Domain.Enums;
 /// </summary>
 public enum CountryCode
 {
+    [Description("")] Undefined = 0,
     [Description("Afghanistan")] AF = 1,
     [Description("Åland Islands")] AX = 2,
     [Description("Albania")] AL = 3,

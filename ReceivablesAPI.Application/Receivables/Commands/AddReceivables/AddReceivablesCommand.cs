@@ -36,26 +36,26 @@ namespace ReceivablesAPI.Application.Receivables.Commands.AddReceivables;
 
             foreach (var receivableDto in request.Receivables.ReceivableList)
             {
-                var entity = _mapper.Map<Receivable>(receivableDto);
+                var receivableEntity = _mapper.Map<Receivable>(receivableDto);
 
-                if (entity.Debtor.Id == 0 && !string.IsNullOrEmpty(entity.Debtor.DebtorReference))
+                if (receivableEntity.Debtor.Id == 0 && !string.IsNullOrEmpty(receivableEntity.Debtor.DebtorReference))
                 {
                     var debtorFromDb = _context.ReceivableDebtors.FirstOrDefault(d =>
-                        d.DebtorReference == entity.Debtor.DebtorReference && d.DebtorName == entity.Debtor.DebtorName);
+                        d.DebtorReference == receivableEntity.Debtor.DebtorReference && d.DebtorName == receivableEntity.Debtor.DebtorName);
 
                     if (debtorFromDb is not null)
-                        entity.Debtor = debtorFromDb;
+                        receivableEntity.Debtor = debtorFromDb;
 
-                    var entityAddress = entity.DebtorAddress;
+                    var entityAddress = receivableEntity.DebtorAddress;
 
-                    if (entity.Debtor.Id > 0)
+                    if (receivableEntity.Debtor.Id > 0)
                     {
                         var debtorAddressFromDb = _context.Receivables
                             .Join(_context.ReceivableDebtorAddresses,
                                 receivable => receivable.DebtorAddressId,
                                 debtorAddress => debtorAddress.Id,
                                 (receivable, debtorAddress) => new { Receivable = receivable, DebtorAddress = debtorAddress })
-                            .Where(joinResult => joinResult.Receivable.DebtorId == entity.Debtor.Id)
+                            .Where(joinResult => joinResult.Receivable.DebtorId == receivableEntity.Debtor.Id)
                             .Select(joinResult => joinResult.DebtorAddress)
                             .FirstOrDefault(da =>
                                 ((da.DebtorAddress1 == null && entityAddress.DebtorAddress1 == null) || da.DebtorAddress1 == entityAddress.DebtorAddress1)
@@ -68,13 +68,17 @@ namespace ReceivablesAPI.Application.Receivables.Commands.AddReceivables;
                             );
 
                         if (debtorAddressFromDb is not null)
-                            entity.DebtorAddress = debtorAddressFromDb;
+                            receivableEntity.DebtorAddress = debtorAddressFromDb;
                     }
                 }
 
-                batch.Receivables.Add(entity);
+                batch.Receivables.Add(receivableEntity);
                 
-                entity.AddDomainEvent(new ReceivableCreatedEvent(entity));
+                receivableEntity.AddDomainEvent(new ReceivableCreatedEvent(receivableEntity));
+                if(receivableEntity.Debtor.Id == 0)
+                    receivableEntity.AddDomainEvent(new ReceivableDebtorCreatedEvent(receivableEntity.Debtor));
+                if(receivableEntity.DebtorAddress.Id == 0)
+                    receivableEntity.AddDomainEvent(new ReceivableDebtorAddressCreatedEvent(receivableEntity.DebtorAddress));
             }
 
             _context.ReceivableBatches.Add(batch);
