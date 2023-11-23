@@ -22,6 +22,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{31C2AB55
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReceivableAPI.Application.UnitTests", "ReceivableAPI.Application.UnitTests\ReceivableAPI.Application.UnitTests.csproj", "{9B6F960B-0A50-48B2-B3B5-7D75D681FF30}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReceivablesAPI.Application.IntegrationTests", "ReceivableAPI.Application.IntegrationTests\ReceivablesAPI.Application.IntegrationTests.csproj", "{37A480D9-A79F-4331-8127-2F04B537D7CF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -48,12 +50,17 @@ Global
 		{9B6F960B-0A50-48B2-B3B5-7D75D681FF30}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9B6F960B-0A50-48B2-B3B5-7D75D681FF30}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9B6F960B-0A50-48B2-B3B5-7D75D681FF30}.Release|Any CPU.Build.0 = Release|Any CPU
+		{37A480D9-A79F-4331-8127-2F04B537D7CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{37A480D9-A79F-4331-8127-2F04B537D7CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{37A480D9-A79F-4331-8127-2F04B537D7CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{37A480D9-A79F-4331-8127-2F04B537D7CF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{9B6F960B-0A50-48B2-B3B5-7D75D681FF30} = {31C2AB55-1219-4083-AF76-23A894140C5C}
+		{37A480D9-A79F-4331-8127-2F04B537D7CF} = {31C2AB55-1219-4083-AF76-23A894140C5C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0CCE04C2-58B9-4597-9E56-EB833F7D331D}
