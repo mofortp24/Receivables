@@ -1,14 +1,10 @@
 ﻿using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using ReceivablesAPI.Application.Common.Interfaces;
-//using ReceivablesAPI.Application.Common.Security;
-using ReceivablesAPI.Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace ReceivablesAPI.Application.Receivables.Queries.GetReceivablesSummary;
 
-//[Authorize]
 public record GetReceivablesOpenClosedSummaryQuery : IRequest<ReceivablesOpenClosedSummary>
 {
     public DateTime? ReceivablesSummaryDate { get; init; }
@@ -27,10 +23,13 @@ public class GetReceivablesSummaryQueryHandler : IRequestHandler<GetReceivablesO
 
     public async Task<ReceivablesOpenClosedSummary> Handle(GetReceivablesOpenClosedSummaryQuery request, CancellationToken cancellationToken)
     {
-        var receivableStatsTill = (request.ReceivablesSummaryDate?.Date ?? DateTime.Now);
+        var receivableStatsTill = request.ReceivablesSummaryDate ?? DateTime.Now;
+
+        var temp = _context.Receivables.Select(r => r);
+
         var openCloseCounters = await _context.Receivables
             .Where(r => DateTime.Compare(r.Created, receivableStatsTill) < 0)
-            .GroupBy(r => new { IsOpen = (r.ClosedDate.HasValue ? 0 : 1), IsCosed = (r.ClosedDate.HasValue ? 1 : 0) })
+            .GroupBy(r => new { IsOpen = (r.ClosedDate.HasValue || (r.Cancelled.HasValue && r.Cancelled.Value) ? 0 : 1), IsCosed = (r.ClosedDate.HasValue || (r.Cancelled.HasValue && r.Cancelled.Value) ? 1 : 0) })
             .Select(g => new
             {
                 g.Key.IsOpen,

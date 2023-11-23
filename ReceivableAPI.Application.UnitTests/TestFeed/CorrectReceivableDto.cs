@@ -16,7 +16,7 @@ public static class CorrectReceivableDtoFeed
     {
         return new ReceivableDto
         {
-            Reference = "INV/01/2023",
+            Reference = "RCVBL/01/2023",
             CurrencyCode = "PLN",
             IssueDate = DateTime.Now.ToString(ValidationFormatProviders.DateTimeAcceptableFormat),
             

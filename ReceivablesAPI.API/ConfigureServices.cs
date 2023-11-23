@@ -1,9 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
-using ReceivablesAPI.Application.Common.Interfaces;
+﻿using ReceivablesAPI.Application.Common.Interfaces;
 using ReceivablesAPI.Infrastructure.Persistence;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
 using ReceivablesAPI.API.Services;
 
 namespace Microsoft.Extensions.DependencyInjection;

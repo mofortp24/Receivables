@@ -113,11 +113,11 @@ namespace ReceivablesAPI.Infrastructure.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    BatchReference = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    BatchReference = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Created = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedBy = table.Column<string>(type: "nvarchar(75)", maxLength: 75, nullable: true),
                     LastModified = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    LastModifiedBy = table.Column<string>(type: "nvarchar(75)", maxLength: 75, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -130,16 +130,39 @@ namespace ReceivablesAPI.Infrastructure.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    DebtorReference = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DebtorName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DebtorReference = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    DebtorName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Created = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedBy = table.Column<string>(type: "nvarchar(75)", maxLength: 75, nullable: true),
                     LastModified = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    LastModifiedBy = table.Column<string>(type: "nvarchar(75)", maxLength: 75, nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ReceivableDebtor_DebtorId", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ReceivableDebtorAddress",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    DebtorAddress1 = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
+                    DebtorAddress2 = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
+                    DebtorTown = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    DebtorState = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    DebtorZip = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: true),
+                    DebtorCountryCode = table.Column<int>(type: "int", nullable: false),
+                    DebtorRegistrationNumber = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: true),
+                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(75)", maxLength: 75, nullable: true),
+                    LastModified = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifiedBy = table.Column<string>(type: "nvarchar(75)", maxLength: 75, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ReceivableDebtorAddress_DebtorAddressId", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -249,55 +272,26 @@ namespace ReceivablesAPI.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ReceivableDebtorAddress",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    DebtorAddress1 = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DebtorAddress2 = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DebtorTown = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DebtorState = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DebtorZip = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DebtorCountryCode = table.Column<int>(type: "int", nullable: false),
-                    DebtorRegistrationNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ReceivableDebtorId = table.Column<int>(type: "int", nullable: true),
-                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LastModified = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ReceivableDebtorAddress_DebtorAddressId", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ReceivableDebtorAddress_ReceivableDebtor_ReceivableDebtorId",
-                        column: x => x.ReceivableDebtorId,
-                        principalTable: "ReceivableDebtor",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Receivable",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ReceivableBatchId = table.Column<int>(type: "int", nullable: false),
-                    Reference = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Reference = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     CurrencyCode = table.Column<int>(type: "int", nullable: false),
-                    IssueDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IssueDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     OpeningValue = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
                     PaidValue = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
-                    DueDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DueDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ClosedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Cancelled = table.Column<bool>(type: "bit", nullable: true),
                     DebtorId = table.Column<int>(type: "int", nullable: false),
                     DebtorAddressId = table.Column<int>(type: "int", nullable: false),
                     Created = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedBy = table.Column<string>(type: "nvarchar(75)", maxLength: 75, nullable: true),
                     LastModified = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    LastModifiedBy = table.Column<string>(type: "nvarchar(75)", maxLength: 75, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -420,11 +414,6 @@ namespace ReceivablesAPI.Infrastructure.Migrations
                 table: "ReceivableBatch",
                 column: "BatchReference",
                 unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ReceivableDebtorAddress_ReceivableDebtorId",
-                table: "ReceivableDebtorAddress",
-                column: "ReceivableDebtorId");
         }
 
         /// <inheritdoc />

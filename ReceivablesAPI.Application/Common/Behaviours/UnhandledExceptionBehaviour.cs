@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Logging;
+using ReceivablesAPI.Application.Common.Exceptions;
 
 namespace ReceivablesAPI.Application.Common.Behaviours;
 
@@ -17,6 +18,14 @@ public class UnhandledExceptionBehaviour<TRequest, TResponse> : IPipelineBehavio
         try
         {
             return await next();
+        }
+        catch (ValidationException ex)
+        {
+            var requestName = typeof(TRequest).Name;
+
+            _logger.LogError(ex, "ReceivableAPI Request: Validation Exception for Request {Name} {@Request}", requestName, request);
+
+            throw;
         }
         catch (Exception ex)
         {

@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using ReceivablesAPI.Domain.Enums;
-using System.Numerics;
 
 namespace ReceivablesAPI.Infrastructure.Persistence;
 
@@ -80,12 +79,12 @@ public class ApplicationDbContextInitializer
         {
             _context.ReceivableBatches.Add(new ReceivableBatch()
             {
-                BatchReference = "AAAABBBYYY",
+                BatchReference = "Receivable_20231123_184009_1a28",
                 Receivables =
                 {
                     new Receivable()
                     {
-                        Reference = "INV/01/2023",
+                        Reference = "RCVBL/01/2023",
                         CurrencyCode = CurrencyCode.PLN,
 
                         Debtor = new ReceivableDebtor()
@@ -106,6 +105,7 @@ public class ApplicationDbContextInitializer
                         
                         OpeningValue = 654.32m,
                         PaidValue = 123.45m,
+                        IssueDate = DateTime.Now.AddDays(-2),
                         DueDate = DateTime.Now.AddMonths(1),
                         ClosedDate = null,
 
@@ -116,7 +116,7 @@ public class ApplicationDbContextInitializer
                     },
                     new Receivable()
                     {
-                        Reference = "INV/15/2023",
+                        Reference = "RCVBL/15/2023",
                         CurrencyCode = CurrencyCode.PLN,
                         Debtor = new ReceivableDebtor()
                         {
@@ -137,6 +137,7 @@ public class ApplicationDbContextInitializer
 
                         OpeningValue = 333.44m,
                         PaidValue = 111.22m,
+                        IssueDate = DateTime.Now.AddDays(-4),
                         DueDate = DateTime.Now.AddMonths(2),
                         ClosedDate = null,
 

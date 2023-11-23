@@ -1,0 +1,44 @@
+{
+  "Receivables": {
+    "ReceivableList": [
+      {
+        "Reference": "INV-012",
+        "CurrencyCode": "USD",
+        "IssueDate": "2023-11-15T11:23:09",
+        "OpeningValue": 1000.00,
+        "PaidValue": 500.00,
+        "DueDate": "2023-12-15T23:59:59",
+        "ClosedDate": null,
+        "Cancelled": null,
+        "DebtorName": "Sample Debtor",
+        "DebtorReference": "DEB-008",
+        "DebtorAddress1": null,
+        "DebtorAddress2": "DebtorAddress2",
+        "DebtorTown": null,
+        "DebtorState": null,
+        "DebtorZip": null,
+        "DebtorCountryCode": "US",
+        "DebtorRegistrationNumber": "1234567890"
+      },
+      {
+        "Reference": "INV-011",
+        "CurrencyCode": "EUR",
+        "IssueDate": "2023-11-10T15:13:51",
+        "OpeningValue": 1500.00,
+        "PaidValue": 0.00,
+        "DueDate": "2023-12-10T23:59:59",
+        "ClosedDate": null,
+        "Cancelled": null,
+        "DebtorName": "Another Debtor",
+        "DebtorReference": "DEB-009",
+        "DebtorAddress1": "test for address change",
+        "DebtorAddress2": null,
+        "DebtorTown": null,
+        "DebtorState": null,
+        "DebtorZip": "12345",
+        "DebtorCountryCode": "FR",
+        "DebtorRegistrationNumber": null
+      }
+    ]
+  }
+}
