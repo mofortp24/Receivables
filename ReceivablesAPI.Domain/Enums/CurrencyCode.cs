@@ -8,6 +8,7 @@ namespace ReceivablesAPI.Domain.Enums;
 /// </summary>
 public enum CurrencyCode
 {
+    [Description("")] Undefined = 0,
     [Description("AED - United Arab Emirates dirham")] AED = 784,
     [Description("AFN - Afghan afghani")] AFN = 971,
     [Description("ALL - Albanian lek")] ALL = 8,

@@ -7,7 +7,7 @@ namespace ReceivablesAPI.Application.Receivables.Commands.AddReceivables.Dto;
 public class ReceivableDto
 {
     public string Reference { get; set; } = string.Empty;
-    public string CurrencyCode { get; set; } = string.Empty;
+    public string CurrencyCode { get; set; } = "0";
     public string IssueDate { get; set; } = string.Empty;
     public decimal OpeningValue { get; set; }
     public decimal PaidValue { get; set; }
@@ -21,6 +21,6 @@ public class ReceivableDto
     public string? DebtorTown { get; set; }
     public string? DebtorState { get; set; }
     public string? DebtorZip { get; set; }
-    public string DebtorCountryCode { get; set; } = string.Empty;
+    public string DebtorCountryCode { get; set; } = "0";
     public string? DebtorRegistrationNumber { get; set; }
 }
