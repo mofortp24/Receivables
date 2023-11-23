@@ -1,9 +1,9 @@
 ﻿using ReceivablesAPI.Application.Receivables.Commands.AddReceivables;
 using ReceivablesAPI.Application.Receivables.Commands.AddReceivables.Dto;
-using ReceivableAPI.Application.UnitTests.Common;
+using ReceivablesAPI.Application.UnitTests.Common;
 using ReceivablesAPI.Application.Common.Providers;
 
-namespace ReceivableAPI.Application.UnitTests.Receivables.Commands.AddReceivable;
+namespace ReceivablesAPI.Application.UnitTests.Receivables.Commands.AddReceivable;
 
 [TestFixture]
 public class ReceivableDtoValidatorTests

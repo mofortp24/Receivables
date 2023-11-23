@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using ReceivablesAPI.Application.Common.Providers;
 using ReceivablesAPI.Application.Receivables.Commands.AddReceivables.Dto;
 
-namespace ReceivableAPI.Application.UnitTests.TestFeed;
+namespace ReceivablesAPI.Application.UnitTests.TestFeed;
 public static class CorrectReceivableDtoFeed
 {
     public static ReceivableDto GetTestInstance() => GetTestInstance(false);

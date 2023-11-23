@@ -8,9 +8,9 @@ using ReceivablesAPI.Application.Receivables.Commands.AddReceivables;
 using ReceivablesAPI.Application.Receivables.Commands.AddReceivables.Dto;
 using NUnit.Framework;
 using FluentValidation.TestHelper;
-using ReceivableAPI.Application.UnitTests.TestFeed;
+using ReceivablesAPI.Application.UnitTests.TestFeed;
 
-namespace ReceivableAPI.Application.UnitTests.Receivables.Commands.AddReceivable;
+namespace ReceivablesAPI.Application.UnitTests.Receivables.Commands.AddReceivable;
 [TestFixture]
 public class AddReceivablesCommandValidatorTests
 {

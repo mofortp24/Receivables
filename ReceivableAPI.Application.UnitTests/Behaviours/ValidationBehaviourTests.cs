@@ -9,7 +9,7 @@ using ValidationException = ReceivablesAPI.Application.Common.Exceptions.Validat
 using ValidationResult = FluentValidation.Results.ValidationResult;
 using ReceivablesAPI.Application.Common.Providers;
 
-namespace ReceivableAPI.Application.UnitTests.Behaviours;
+namespace ReceivablesAPI.Application.UnitTests.Behaviours;
 [TestFixture]
 public class ValidationBehaviourTests
 {

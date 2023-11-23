@@ -10,7 +10,7 @@ using ReceivablesAPI.Domain.Entities;
 using ReceivablesAPI.Domain.Enums;
 using ReceivablesAPI.Domain.Events;
 
-namespace ReceivableAPI.Application.UnitTests.Receivables.Commands.AddReceivable;
+namespace ReceivablesAPI.Application.UnitTests.Receivables.Commands.AddReceivable;
 
 [TestFixture]
 public class AddReceivablesCommandHandlerTests

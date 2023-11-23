@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 using ReceivablesAPI.Application.Receivables.Commands.AddReceivables.Dto;
 using ReceivablesAPI.Application.Receivables.Commands.AddReceivables;
 using ReceivablesAPI.Application.Receivables.Queries.GetReceivablesSummary;
-using ReceivableAPI.Application.UnitTests.Common;
+using ReceivablesAPI.Application.UnitTests.Common;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
-namespace ReceivableAPI.Application.UnitTests.Receivables.Queries.GetReceivablesSummary;
+namespace ReceivablesAPI.Application.UnitTests.Receivables.Queries.GetReceivablesSummary;
 
 [TestFixture]
 public class GetReceivablesOpenClosedSummaryQueryValidatorTests

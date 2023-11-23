@@ -3,7 +3,7 @@ using FluentValidation;
 using FluentValidation.Internal;
 using Newtonsoft.Json.Linq;
 
-namespace ReceivableAPI.Application.UnitTests.Common;
+namespace ReceivablesAPI.Application.UnitTests.Common;
 public static class ValidationTestHelperExtensions
 {
     public static void ShouldHaveValidationError<T, TProperty>(this AbstractValidator<T> validator, T instance, Expression<Func<T, TProperty>> property)

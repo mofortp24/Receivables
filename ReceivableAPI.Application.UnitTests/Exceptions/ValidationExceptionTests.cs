@@ -4,7 +4,7 @@ using FluentValidation.Results;
 using NUnit.Framework;
 using ReceivablesAPI.Application.Common.Providers;
 
-namespace ReceivableAPI.Application.UnitTests.Exceptions;
+namespace ReceivablesAPI.Application.UnitTests.Exceptions;
 
 public class ValidationExceptionTests
 {

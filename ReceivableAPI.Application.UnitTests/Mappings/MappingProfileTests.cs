@@ -9,7 +9,7 @@ using ReceivablesAPI.Application.Common.Mapping;
 using ReceivablesAPI.Application.Receivables.Commands.AddReceivables.Dto;
 using ReceivablesAPI.Domain.Entities;
 
-namespace ReceivableAPI.Application.UnitTests.Mappings;
+namespace ReceivablesAPI.Application.UnitTests.Mappings;
 public class MappingProfileTests
 {
     private readonly IConfigurationProvider _configuration;
